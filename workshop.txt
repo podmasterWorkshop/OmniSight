@@ -1,9 +1,0 @@
-version=1
-title=OmniSight - 360 Player Vision [B42.20.4]
-description=Adds optional 360 degree player vision.
-description=
-description=IMPORTANT: Requires a one-time manual folder installation. See Workshop description.
-description=
-description=Build 42.20.4 only.
-visibility=private
-tags=Build 42;Gameplay;
