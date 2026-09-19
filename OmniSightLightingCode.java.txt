@@ -1,0 +1,39 @@
+// Add this at the very top of LightingJNI.calculateVisionCone(...),
+// before the vanilla vision calculations:
+
+if (isOmniSightActive(player)) {
+    return degreesToCone(360.0F);
+}
+
+// Add this helper method inside zombie.iso.LightingJNI:
+
+private static boolean isOmniSightActive(IsoGameCharacter character) {
+    // Player-only guard: IsoZombie and all other IsoGameCharacters are excluded.
+    if (!(character instanceof IsoPlayer)) {
+        return false;
+    }
+
+    // Set by OmniSight.lua from the Mod Options checkbox.
+    Object enabled = character.getModData().rawget("OmniSightEnabled");
+
+    if (!Boolean.TRUE.equals(enabled)) {
+        return false;
+    }
+
+    if (character.getWornItems() == null) {
+        return false;
+    }
+
+    // Require the hidden OmniSight implant to actually be equipped.
+    for (int i = 0; i < character.getWornItems().size(); i++) {
+        zombie.inventory.InventoryItem item =
+                character.getWornItems().getItemByIndex(i);
+
+        if (item != null
+                && "OmniSight.OmniVisionImplant".equals(item.getFullType())) {
+            return true;
+        }
+    }
+
+    return false;
+}
