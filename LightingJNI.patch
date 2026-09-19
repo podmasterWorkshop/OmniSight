@@ -1,0 +1,47 @@
+--- vanilla/zombie/iso/LightingJNI.java	Build 42.20.4
++++ omnisight/zombie/iso/LightingJNI.java	Build 42.20.4 + OmniSight
+@@
+ public static float calculateVisionCone(IsoGameCharacter player) {
++    // OmniSight: only override the player's directional cone when the
++    // mod option is enabled and the invisible implant is equipped.
++    if (isOmniSightActive(player)) {
++        return degreesToCone(360.0F);
++    }
++
+     float dayLightStrength = ClimateManager.getInstance().getDayLightStrength();
+     float dayLightStrengthInverted = 1.0F - dayLightStrength;
+     float cone;
+@@
+     return degreesToCone(visionConeLerp);
+ }
++
++private static boolean isOmniSightActive(IsoGameCharacter character) {
++    // Explicitly player-only. This prevents the patch from affecting
++    // IsoZombie or any other IsoGameCharacter implementation.
++    if (!(character instanceof IsoPlayer)) {
++        return false;
++    }
++
++    Object enabled =
++            character.getModData().rawget("OmniSightEnabled");
++
++    if (!Boolean.TRUE.equals(enabled)) {
++        return false;
++    }
++
++    if (character.getWornItems() == null) {
++        return false;
++    }
++
++    for (int i = 0; i < character.getWornItems().size(); i++) {
++        zombie.inventory.InventoryItem item =
++                character.getWornItems().getItemByIndex(i);
++
++        if (item != null
++                && "OmniSight.OmniVisionImplant".equals(item.getFullType())) {
++            return true;
++        }
++    }
++
++    return false;
++}
