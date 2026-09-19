@@ -1,0 +1,13 @@
+module OmniSight
+{
+    item OmniVisionImplant
+    {
+        DisplayName = Omni Vision Implant,
+        DisplayCategory = Accessory,
+        ItemType = base:clothing,
+        Weight = 0.01,
+        Icon = Glasses_Normal,
+        BodyLocation = omnisight:vision,
+        WorldRender = false,
+    }
+}
